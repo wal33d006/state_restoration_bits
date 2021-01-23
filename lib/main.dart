@@ -198,7 +198,6 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
-//            isThreeLine: true,
               ),
               Divider(),
             ],
