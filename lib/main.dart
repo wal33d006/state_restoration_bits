@@ -3,12 +3,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:state_restoration_bits/search_page.dart';
 
 void main() {
-  runApp(
-    RootRestorationScope(
-      child: MyApp(),
-      restorationId: 'root',
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,6 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      restorationScopeId: 'root',
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
@@ -28,21 +24,30 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  MyHomePage({Key? key, this.title}) : super(key: key);
+  final String? title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
+  @override
+  // TODO: implement restorationId
+  String get restorationId => 'scroll_view';
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_scrollIndex, 'scroll_index');
+  }
+
   final RestorableInt _scrollIndex = RestorableInt(0);
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
-  final List<Email> users = [
+  final List<Email> emails = [
     Email(
       title: 'Flutter Karachi',
       day: 'Friday',
@@ -115,6 +120,25 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
       description:
           'A new version of Flutter Pakistan is available on the Play Store to test.',
     ),
+    Email(
+      title: 'Waleed',
+      day: 'Saturday',
+      subject: 'State restoration',
+      description: 'Some tips and tricks regarding state restoration',
+    ),
+    Email(
+      title: 'Amazon',
+      day: 'Tuesday',
+      subject: 'Order update',
+      description: 'Your order has been confirmed',
+    ),
+    Email(
+      title: 'Daraz',
+      day: 'Wednesday',
+      subject: 'Refund successful',
+      description:
+          'You have been refunded your order against the tracking number 456635872354.',
+    ),
   ];
 
   @override
@@ -140,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title!),
         actions: [
           IconButton(
               icon: Icon(Icons.search),
@@ -154,15 +178,15 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
         ],
       ),
       body: ScrollablePositionedList.builder(
-        itemCount: users.length,
+        itemCount: emails.length,
         itemBuilder: (context, index) {
-          var user = users[index];
+          var user = emails[index];
           String initials = '';
-          if (user.title.contains(' ')) {
+          if (user.title!.contains(' ')) {
             initials =
-                user.title.split(' ')[0][0] + user.title.split(' ')[1][0];
+                user.title!.split(' ')[0][0] + user.title!.split(' ')[1][0];
           } else {
-            initials = user.title[0];
+            initials = user.title![0];
           }
           return Column(
             children: [
@@ -172,18 +196,18 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
                     initials.toUpperCase(),
                   ),
                 ),
-                title: Text(user.title),
+                title: Text(user.title!),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      user.subject,
+                      user.subject!,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      user.description,
+                      user.description!,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -194,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(2)),
                   child: Text(
-                    user.day,
+                    user.day!,
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
@@ -208,22 +232,13 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
       ),
     );
   }
-
-  @override
-  // TODO: implement restorationId
-  String get restorationId => 'scroll_view';
-
-  @override
-  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
-    registerForRestoration(_scrollIndex, 'scroll_index');
-  }
 }
 
 class Email {
-  final String title;
-  final String description;
-  final String subject;
-  final String day;
+  final String? title;
+  final String? description;
+  final String? subject;
+  final String? day;
 
   Email({
     this.title,

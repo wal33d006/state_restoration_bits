@@ -34,7 +34,7 @@ class _SearchPageState extends State<SearchPage> with RestorationMixin {
   String get restorationId => 'search_page';
 
   @override
-  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     registerForRestoration(_controller, 'controller');
   }
 }
