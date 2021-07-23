@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+//import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:state_restoration_bits/search_page.dart';
 
 void main() {
@@ -43,9 +43,9 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
 
   final RestorableInt _scrollIndex = RestorableInt(0);
 
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
+//  final ItemScrollController itemScrollController = ItemScrollController();
+//  final ItemPositionsListener itemPositionsListener =
+//      ItemPositionsListener.create();
 
   final List<Email> emails = [
     Email(
@@ -143,22 +143,22 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
 
   @override
   void initState() {
-    _scrollToIndex();
+//    _scrollToIndex();
     super.initState();
   }
 
-  void _scrollToIndex() async {
-    await Future.delayed(Duration(milliseconds: 500));
-    itemScrollController.scrollTo(
-      index: _scrollIndex.value,
-      duration: Duration(milliseconds: 1000),
-      curve: Curves.easeInOut,
-    );
-    itemPositionsListener.itemPositions.addListener(() {
-      _scrollIndex.value =
-          itemPositionsListener.itemPositions.value.first.index;
-    });
-  }
+//  void _scrollToIndex() async {
+//    await Future.delayed(Duration(milliseconds: 500));
+//    itemScrollController.scrollTo(
+//      index: _scrollIndex.value,
+//      duration: Duration(milliseconds: 1000),
+//      curve: Curves.easeInOut,
+//    );
+//    itemPositionsListener.itemPositions.addListener(() {
+//      _scrollIndex.value =
+//          itemPositionsListener.itemPositions.value.first.index;
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
               }),
         ],
       ),
-      body: ScrollablePositionedList.builder(
+      body: ListView.builder(
         itemCount: emails.length,
         itemBuilder: (context, index) {
           var user = emails[index];
@@ -227,8 +227,6 @@ class _MyHomePageState extends State<MyHomePage> with RestorationMixin {
             ],
           );
         },
-        itemScrollController: itemScrollController,
-        itemPositionsListener: itemPositionsListener,
       ),
     );
   }
